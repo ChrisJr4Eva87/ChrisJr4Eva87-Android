@@ -1,0 +1,49 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SwitchTheme" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorControlActivated">@android:color/white</item>
+    </style>
+
+    <style name="CrashReportingDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="DashboardEntryText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingEnd">22dp</item>
+        <item name="android:textColor">@color/almostBlack</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="DashboardEntryIcon">
+        <item name="android:layout_width">66dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:clickable">false</item>
+        <item name="android:contentDescription">@string/trackerNetworksContentDescription</item>
+    </style>
+
+</resources>
