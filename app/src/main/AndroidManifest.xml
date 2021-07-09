@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.duckduckgo.app.browser">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+
+    <application
+        android:name="com.duckduckgo.app.global.DuckDuckGoApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/appName"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <meta-data
+            android:name="android.webkit.WebView.MetricsOptOut"
+            android:value="true" />
+
+        <activity
+            android:name="com.duckduckgo.app.launch.LaunchActivity"
+            android:label="@string/appName"
+            android:relinquishTaskIdentity="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.duckduckgo.app.onboarding.ui.OnboardingActivity"
+            android:label="@string/appName" />
+
+        <activity
+            android:name="com.duckduckgo.app.home.HomeActivity"
+            android:alwaysRetainTaskState="true"
+            android:label="@string/appName">
+
+            <!-- Allows app to become default browser -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+            </intent-filter>
+
+            <!-- Allows apps to consume links and text shared from other apps e.g chrome -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <!-- Allow app to be default assistant -->
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+
+        <activity
+            android:name=".BrowserActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName="com.duckduckgo.app.home.HomeActivity" />
+
+        <activity
+            android:name="com.duckduckgo.app.tabs.TabSwitcherActivity"
+            android:label="@string/tabActivityTitle" />
+
+        <activity
+            android:name="com.duckduckgo.app.privacymonitor.ui.PrivacyDashboardActivity"
+            android:label="@string/privacyDashboardActivityTitle"
+            android:parentActivityName=".BrowserActivity" />
+
+        <activity
+            android:name="com.duckduckgo.app.privacymonitor.ui.ScorecardActivity"
+            android:label="@string/scorecardActivityTitle"
+            android:parentActivityName="com.duckduckgo.app.privacymonitor.ui.PrivacyDashboardActivity" />
+
+        <activity
+            android:name="com.duckduckgo.app.privacymonitor.ui.TrackerNetworksActivity"
+            android:label="@string/networksActivityTitle"
+            android:parentActivityName="com.duckduckgo.app.privacymonitor.ui.PrivacyDashboardActivity" />
+
+        <activity
+            android:name="com.duckduckgo.app.privacymonitor.ui.PrivacyPracticesActivity"
+            android:label="@string/privacyTermsActivityTitle"
+            android:parentActivityName="com.duckduckgo.app.privacymonitor.ui.PrivacyDashboardActivity" />
+
+        <activity
+            android:name="com.duckduckgo.app.settings.SettingsActivity"
+            android:label="@string/settingsActivityTitle" />
+
+        <activity
+            android:name="com.duckduckgo.app.about.AboutDuckDuckGoActivity"
+            android:label="@string/aboutActivityTitle"
+            android:parentActivityName="com.duckduckgo.app.settings.SettingsActivity"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name="com.duckduckgo.app.bookmarks.ui.BookmarksActivity"
+            android:label="@string/bookmarksActivityTitle" />
+
+        <service
+            android:name="com.duckduckgo.app.job.AppConfigurationJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver android:name="com.duckduckgo.widget.SearchWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/search_widget_info" />
+        </receiver>
+
+    </application>
+
+</manifest>
