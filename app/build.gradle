@@ -1,0 +1,116 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply from: '../versioning.gradle'
+
+ext {
+    VERSION_NAME = "0.2.0"
+}
+
+android {
+    compileSdkVersion 27
+    buildToolsVersion "26.0.2"
+    defaultConfig {
+        applicationId "com.duckduckgo.app"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode buildVersionCode()
+        versionName VERSION_NAME
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        archivesBaseName = "duckduckgo-$versionName"
+    }
+    signingConfigs {
+        release
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    externalNativeBuild {
+
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+    lintOptions {
+        abortOnError false
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+    sourceSets {
+        String sharedTestJavaDir = 'src/sharedTest/java'
+        String sharedTestResourcesDir = 'src/sharedTest/resources'
+        test {
+            java.srcDir sharedTestJavaDir
+            resources.srcDir sharedTestResourcesDir
+        }
+        androidTest {
+            java.srcDir sharedTestJavaDir
+            resources.srcDir sharedTestResourcesDir
+        }
+    }
+
+    def staticConfigPath = "${System.getenv('HOME')}/jenkins_static/com.duckduckgo.mobile.android"
+    def propertiesPath = "${staticConfigPath}/ddg_android_build.properties"
+    def propertiesFile = new File(propertiesPath)
+    if (propertiesFile.exists()) {
+        println "Signing properties found"
+        def props = new Properties()
+        props.load(new FileInputStream(propertiesFile))
+        android.signingConfigs.release.storeFile = file("${staticConfigPath}/${props['key.store']}")
+        android.signingConfigs.release.storePassword = props['key.store.password']
+        android.signingConfigs.release.keyAlias = props['key.alias']
+        android.signingConfigs.release.keyPassword = props['key.alias.password']
+    } else {
+        println "Signing properties not found at ${propertiesPath}, releases will NOT succeed"
+        android.buildTypes.release.signingConfig = null
+    }
+}
+
+ext {
+    supportLibrary = "27.0.1"
+    architectureComponents = "1.0.0"
+    dagger = "2.13"
+    retrofit = "2.3.0"
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "com.android.support:appcompat-v7:$supportLibrary"
+    implementation "com.android.support:design:$supportLibrary"
+    implementation "com.android.support.constraint:constraint-layout:1.0.2"
+    implementation "com.squareup.okhttp3:okhttp:3.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
+    implementation "io.reactivex.rxjava2:rxjava:2.1.6"
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
+    implementation "com.jakewharton.timber:timber:4.6.0"
+    implementation "android.arch.lifecycle:extensions:$architectureComponents"
+    implementation "android.arch.lifecycle:reactivestreams:$architectureComponents"
+    implementation "com.google.dagger:dagger-android:$dagger"
+    implementation "com.google.dagger:dagger-android-support:$dagger"
+    releaseImplementation 'com.faendir:acra:4.10.0'
+
+    kapt "com.google.dagger:dagger-android-processor:$dagger"
+    kapt "com.google.dagger:dagger-compiler:$dagger"
+
+    testImplementation "org.mockito:mockito-core:2.12.0"
+    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    testImplementation "junit:junit:4.12"
+    testImplementation "android.arch.core:core-testing:$architectureComponents"
+
+    androidTestImplementation "com.android.support.test:runner:1.0.1"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
+    androidTestImplementation "org.mockito:mockito-android:2.12.0"
+    androidTestImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    androidTestImplementation "android.arch.core:core-testing:$architectureComponents"
+}
